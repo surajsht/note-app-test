@@ -10,6 +10,7 @@ const GlobalContext = createContext();
 
 const Context = ({ children }) => {
   let [currentUser, setCurrentUser] = useState();
+  let [loggedinUser, setLoggedinUser] = useState();
 
   const router = useRouter();
 
@@ -17,7 +18,7 @@ const Context = ({ children }) => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
-  }, []);
+  }, [loggedinUser]);
 
   const Signout = async () => {
     try {
@@ -28,7 +29,7 @@ const Context = ({ children }) => {
     }
   };
 
-  const contextValue = { currentUser, Signout };
+  const contextValue = { currentUser, Signout, setLoggedinUser };
 
   return (
     <GlobalContext.Provider value={contextValue}>

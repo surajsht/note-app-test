@@ -4,6 +4,7 @@ import { useState } from "react";
 import { auth } from "../config/FireConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { CustomContext } from "../context/Context";
 
 const Signup = () => {
   let [UserName, setUserName] = useState("");
@@ -13,14 +14,21 @@ const Signup = () => {
 
   const router = useRouter();
 
+  let { setLoggedinUser } = CustomContext();
+
   const SignupUser = async () => {
     setError("");
     try {
-      await createUserWithEmailAndPassword(auth, UserEmail, UserPassword);
+      const data = await createUserWithEmailAndPassword(
+        auth,
+        UserEmail,
+        UserPassword
+      );
       await updateProfile(auth.currentUser, {
         displayName: UserName,
       });
       router.push("/profile");
+      setLoggedinUser(data);
     } catch (e) {
       console.error(e);
       setError(e.message);
