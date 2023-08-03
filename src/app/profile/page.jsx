@@ -4,7 +4,7 @@ import React from "react";
 import { CustomContext } from "../context/Context";
 
 const Profile = () => {
-  let { currentUser } = CustomContext();
+  let { currentUser, Signout } = CustomContext();
 
   return (
     <div className="container mx-auto">
@@ -13,7 +13,10 @@ const Profile = () => {
           Welcome <span> {currentUser?.displayName} </span>
         </div>
 
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => Signout()}
+        >
           Log out
         </button>
       </div>

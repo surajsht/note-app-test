@@ -1,9 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/FireConfig";
 
 const Login = () => {
+  let [UserEmail, setUserEmail] = useState("");
+  let [UserPassword, setUserPassword] = useState("");
+  let [error, setError] = useState("");
+
   const router = useRouter();
+
+  const SigninUser = async () => {
+    setError("");
+    try {
+      await signInWithEmailAndPassword(auth, UserEmail, UserPassword);
+      router.push("/profile");
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
   return (
     <div className="container h-screen flex justify-center flex-col items-center mx-auto">
@@ -12,6 +29,7 @@ const Login = () => {
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           action=""
         >
+          {error ? <p className="text-red-600 mb-2"> {error} </p> : null}
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -24,6 +42,8 @@ const Login = () => {
               id="email"
               type="text"
               placeholder="email"
+              value={UserEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -38,12 +58,15 @@ const Login = () => {
               id="password"
               type="password"
               placeholder="******************"
+              value={UserPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
             />
           </div>
           <div className="space-y-4">
             <button
               className="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
+              onClick={() => SigninUser()}
             >
               Sign In
             </button>
