@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { auth } from "../config/FireConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import { db } from "../config/FireConfig";
 import { CustomContext } from "../context/Context";
 
 const Signup = () => {
@@ -27,6 +29,7 @@ const Signup = () => {
       await updateProfile(auth.currentUser, {
         displayName: UserName,
       });
+      await setDoc(doc(db, "users", UserEmail), {});
       router.push("/profile");
       setLoggedinUser(data);
     } catch (e) {
